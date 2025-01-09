@@ -1,83 +1,159 @@
+<!DOCTYPE html>
 <html>
-<head>
-<title>TimeTable</title>  
-</head>
-<style>
-td,th{
-width :100px;
-}
-</style>
-<body>
-<h1 style="text-align: center;">Sem 6 Time Table</h1>
-<table border = "1" style = "text-align : center">
+  <head>
+    <title>TimeTable</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h1 {
+        text-align: center;
+        font-size: 24px;
+        margin: 20px 0;
+      }
+      table {
+        border-collapse: collapse;
+        margin: 0 auto;
+        font-size: 16px;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        text-align: center;
+        padding: 10px;
+      }
+      th {
+        font-weight: 500;
+      }
+      .highlight-day {
+        background-color: #ffe4e1; /* Pastel pink for the current day */
+      }
+      .highlight-time {
+        background-color: #ffecb3; /* Pastel yellow for the current time slot */
+      }
+      .highlight-class {
+        background-color: #e8f5e9; /* Pastel green for the current class */
+      }
+      .highlight-lunch {
+        background-color: #c8e6c9; /* Pastel green for lunch hour */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sem 6 Time Table</h1>
+    <table>
+      <tr>
+        <th>Day</th>
+        <th>8-9</th>
+        <th>9-10</th>
+        <th>10-11</th>
+        <th>11-12</th>
+        <th>12-13</th>
+        <th rowspan="6" id="lunch-cell">
+          <p><h2>L<br/>U<br/>N<br/>C<br/>H</h2></p>
+        </th>
+        <th>14-15</th>
+        <th>15-16</th>
+      </tr>
+      <tr>
+        <th>Monday</th>
+        <td></td>
+        <td>Cipher 507</td>
+        <td colspan="2">WD LAB 510</td>
+        <td>EnggEco 305</td>
+        <td colspan="2">IC 507</td>
+      </tr>
+      <tr>
+        <th>Tuesday</th>
+        <td>WD 507</td>
+        <td>CD 505</td>
+        <td>AI 505</td>
+        <td>Big D 505</td>
+        <td></td>
+        <td colspan="2">CLAD 507</td>
+      </tr>
+      <tr>
+        <th>Wednesday</th>
+        <td>CD 505</td>
+        <td>Cipher 507</td>
+        <td>WD 507</td>
+        <td>AI 505</td>
+        <td>EnggEco 305</td>
+        <td colspan="2"></td>
+      </tr>
+      <tr>
+        <th>Thursday</th>
+        <td>Cipher 507</td>
+        <td>WD 507</td>
+        <td>CD 505</td>
+        <td>Big D 505</td>
+        <td></td>
+        <td colspan="2">AI LAB 220</td>
+      </tr>
+      <tr>
+        <th>Friday</th>
+        <td>AI 505</td>
+        <td>Big D 505</td>
+        <td colspan="2">CD LAB 214</td>
+        <td>EnggEco 305</td>
+        <td colspan="2"></td>
+      </tr>
+    </table>
 
-<tr>
-<th>Day</th>
-<th>8-9</th>
-<th>9-10</th>
-<th>10-11</th>
-<th>11-12</th>
-<th>12-13</th>
-<th style = "width : 40px;" rowspan="6"><pre><h1>
-L
-U
-N
-C
-H
-</h1>
-</pre></th>
-<th>14-15</th>
-<th>15-16</th>
-</tr>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+  const now = new Date();
+  const hour = now.getHours();
+  var dayIndex = now.getDay();
+  if(hour>16)
+    dayIndex++; // 0 for Sunday, 1 for Monday, etc.
 
-<tr>
-<th>Monday</th>
-<td>Breakfast</td>
-<td>Cipher 507</td>
-<td colspan = "2">WD LAB 510</td>
-<td>EnggEco 305</td>
-<td colspan = "2">IC 507</td>
-</tr>
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-<tr>
-<th>Tuesday</th>
-<td>WD 507</td>
-<td>CD 505</td>
-<td>AI 505</td>
-<td>Big D 505</td>
-<td></td>
-<td colspan= 2>CLAD 507</td>
-</tr>
+    
+  // Skip highlighting on Saturday and Sunday
+  if (dayIndex === 0 || dayIndex === 6) return;
 
-<tr>
-<th>Wednesday</th>
-<td>CD 505</td>
-<td>Cipher 507</td>
-<td>WD 507</td>
-<td>AI 505</td>
-<td>EnggEco 305</td>
-<td colspan = "2"></td>
-</tr>
 
-<tr>
-<th>Thursday</th>
-<td>Cipher 507</td>
-<td>WD 507</td>
-<td>CD 505</td>
-<td>Big D 505</td>
-<td></td>
-<td colspan= 2>AI LAB 220</td>
-</tr>
+  const table = document.querySelector("table");
+  const rows = table.rows;
 
-<tr>
-<th>Friday</th>
-<td>AI 505</td>
-<td>Big D 505</td>
-<td colspan = 2>CD LAB 214</td>
-<td>EnggEco 305</td>
-<td colspan = "2"></td>
-</tr>
+  // Highlight the current day row
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i].cells[0].textContent === days[dayIndex]) {
+      rows[i].classList.add("highlight-day");
+      if(hour>16)
+        return;
+      if (hour >= 13 && hour < 14) {
+        // Highlight lunch during its time
+        const lunchCell = document.getElementById("lunch-cell");
+        if (lunchCell) lunchCell.classList.add("highlight-lunch");
+        return; // Skip highlighting other time slots during lunch
+      }
 
-</table>
-</body>
+      // Highlight the current class cell
+      const cells = rows[i].cells;
+      var k =1,map=[];
+      for (let j = 1; j < cells.length; j++) {
+        const cell = cells[j];
+        // console.log(cell.innerText);
+        const colspan = parseInt(cell.getAttribute("colspan") || "1");
+        for(let l=0;l<colspan;l++)
+          map.push(j);
+          }
+          const index = map.pop(hour);
+          cells[index].classList.add("highlight-class");
+        }
+  }
+
+  // Highlight the current time slot in the header row
+  const timeHeader = rows[0].cells[hour - 7];
+  if (timeHeader) timeHeader.classList.add("highlight-time");
+});
+    </script>
+  </body>
 </html>
