@@ -126,7 +126,7 @@
   for (let i = 1; i < rows.length; i++) {
     if (rows[i].cells[0].textContent === days[dayIndex]) {
       rows[i].classList.add("highlight-day");
-      if(hour>16)
+      if(hour>=16)
         return;
       if (hour >= 13 && hour < 14) {
         // Highlight lunch during its time
@@ -137,17 +137,18 @@
 
       // Highlight the current class cell
       const cells = rows[i].cells;
-      var k =1,map=[];
+      var k =1;
+      const map=[];
       for (let j = 1; j < cells.length; j++) {
         const cell = cells[j];
         // console.log(cell.innerText);
         const colspan = parseInt(cell.getAttribute("colspan") || "1");
-        for(let l=0;l<colspan;l++)
+        for (let l = 0; l < colspan; l++) {
           map.push(j);
-          }
-          const index = map.pop(hour);
-          cells[index].classList.add("highlight-class");
         }
+      }
+      cells[map[hour - 8]].classList.add("highlight-class");
+    }
   }
 
   // Highlight the current time slot in the header row
